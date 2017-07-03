@@ -1,6 +1,7 @@
 ---
 - name: instance creation
   ec2:
+    key_name: "{{ ec2.keypair }}"
     region: "{{ ec2.region }}"
     instance_tags: "{{ ec2.tags }}"
     image: "{{ ec2.image }}"
@@ -9,3 +10,4 @@
     vpc_subnet_id: "{{ ec2.subnet }}"
     assign_public_ip: "{{ ec2.public_ip | default('') }}"
     wait: True
+  register: new_instance
