@@ -6,4 +6,8 @@
   tasks:
     - include: roles/ec2/main.yml
       static: no
+    - include: roles/ec2/configure.yml
+      static: no
+    - include: roles/ec2/terminate.yml
+      static: no
   tags: ec2_create
