@@ -1,0 +1,6 @@
+---
+- name: terminate instance after test
+  ec2: 
+    groups: new_node
+    state: 'absent'
+    instance_ids: "{{ ec2.instance_ids }}"
