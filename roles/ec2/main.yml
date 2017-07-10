@@ -20,12 +20,3 @@
     groups: new_node
     ansible_user: openvpnas
   with_items: "{{ ec2.instances }}"
-
-- name: wait for new_node ssh connection
-  wait_for:
-    host: "{{ item.public_dns_name }}"
-    port: 22  
-    delay: 15
-    timeout: 320
-    state: started
-  with_items: "{{ ec2.instances }}"
