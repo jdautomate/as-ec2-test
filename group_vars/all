@@ -2,9 +2,9 @@ ec2:
   region: us-west-1
   keypair: openvpn
   image: ami-fa105b9a
-  sg: sg-da2ac6bf
+  sg: OpenVPN Access Server-2-1-4-AutogenByAWSMP-
   instance_type: t2.micro
-  subnet: subnet-22d53f4a
+  subnet: subnet-25d53f4d
   public_ip: yes
   tags:
     Name: ansible-created-instance    
