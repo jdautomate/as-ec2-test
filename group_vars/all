@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 region: us-west-1
 keypair: openvpn
 image: ami-091f3069
@@ -8,3 +9,15 @@ public_ip: yes
 tags:
   Name: ansible-created-instance    
   ansible: created
+=======
+ec2:
+  region: us-west-1
+  keypair: openvpn
+  image: ami-fa105b9a
+  sg: OpenVPN Access Server-2-1-4-AutogenByAWSMP-
+  instance_type: t2.micro
+  subnet: subnet-25d53f4d
+  public_ip: yes
+  tags:
+    Name: ansible-created-instance    
+>>>>>>> e0caaaeaa6a7b741fe9d2c4c3be86ee38ca8fb1f

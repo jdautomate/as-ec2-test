@@ -1,0 +1,58 @@
+---
+- name: configure new instance
+  hosts: new_node
+  gather_facts: false
+  tasks:
+    - name: wait for new_node ssh connection
+      wait_for:
+        host: "{{ item.public_dns_name }}"
+        port: 22  
+        delay: 15
+        timeout: 320
+        state: started
+      with_items: "{{ ec2.instances }}"
+
+    - name: test connection, first step
+      ping: 
+    - name: answer AS setup questions - no way around it
+      pause:
+        prompt: type 'yes' and push enter
+    - name: Press 'Enter' a bunch of times - 10 total
+      pause:
+        prompt: "Do it now! - press ENTER"
+    - name: Press 'Enter' a bunch of times - 10 total
+      pause:
+        prompt: "Do it now! - press ENTER"
+    - name: Press 'Enter' a bunch of times - 10 total
+      pause:
+        prompt: "Do it now! - press ENTER"
+    - name: Press 'Enter' a bunch of times - 10 total
+      pause:
+        prompt: "Do it now! - press ENTER"
+    - name: Press 'Enter' a bunch of times - 10 total
+      pause:
+        prompt: "Do it now! - press ENTER"
+    - name: Press 'Enter' a bunch of times - 10 total
+      pause:
+        prompt: "Do it now! - press ENTER"
+    - name: Press 'Enter' a bunch of times - 10 total
+      pause:
+        prompt: "Do it now! - press ENTER"
+    - name: Press 'Enter' a bunch of times - 10 total
+      pause:
+        prompt: "Do it now! - press ENTER"
+    - name: Press 'Enter' a bunch of times - 10 total
+      pause:
+        prompt: "Do it now! - press ENTER"
+    - name: Press 'Enter' a bunch of times - 10 total
+      pause:
+        prompt: "Do it now! - press ENTER"
+    
+    - name: sudo up
+      become: True
+      become_method: sudo
+      
+    - name: install latest AS 2.1.9 package
+      get_url: 
+        url:  http://swupdate.openvpn.org/as/openvpn-as-2.1.9-Ubuntu16.amd_64.deb
+        dest: /root/
