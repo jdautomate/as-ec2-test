@@ -1,0 +1,81 @@
+---
+- hosts: "{{ inventory_hostname }}"
+  vars:
+    inventory_hostname: tag_ansible_created
+    name: ansible-created-instance
+    ansible_user: openvpnas
+    ansible_ssh_private_key_file: ~/.ssh/openvpn.pem
+  gather_facts: True
+  remote_user: openvpnas
+  become: True
+  tasks:
+    - name: get ec2 gather_facts
+      ec2_facts:
+    - debug: var=ansible_ec2_instance_id
+
+    - name: test connection
+      ping:
+
+    - name: install python-pexpect from package
+      apt:
+        name: python-pexpect
+        state: latest
+
+    - name: run initialization script
+      expect:
+        command: ovpn-init
+        # echo: yes
+        responses:
+          "(?i)delete existing configuration[^\r\n]*: ?$": "DELETE"
+          "(?i)indicate your agreement[^\r\n]*: ?$": "yes"
+          "(?i)enter for default[^\r\n]*: ?$": ""
+          "(?i)license key[^\r\n]*: ?$": ""
+
+    - name: find openvpn_as directory
+      raw: ls /usr/local | grep openvpn_as >> /root/test_results.log
+
+    - name: is openvpnas service up and running?
+      raw: service openvpnas status | head | grep openvpnas.service >> /root/test_results.log
+
+    - name: pid checks
+      raw: ps aux | grep openvpnas >> /root/test_results.log
+
+    - name: choose local authentication
+      shell: /usr/local/openvpn_as/scripts/sacli --key auth.module.type --value local ConfigPut
+
+    - name: add user named testuser
+      shell: /usr/local/openvpn_as/scripts/sacli -u testuser -k type -v user_connect UserPropPut
+
+    - name: add admin user named admin
+      shell: /usr/local/openvpn_as/scripts/sacli -u admin -k prop_superuser -v true UserPropPut
+
+    - name: restart openvpnas service
+      service: 
+        name: openvpnas
+        state: restarted
+
+    - name: test authentication for testuser
+      shell: /usr/local/openvpn_as/scripts/confdba -us >> /root/test_results.log
+
+    - name: add user-specific access controls - testuser nat to 10.0.0.0/24
+      shell: /usr/local/openvpn_as/scripts/sacli -u testuser -k access_to.0 --value "+NAT:10.0.0.0/24" UserPropPut
+
+    - name: add user-specific access controls - admin route to 192.168.33.0/24
+      shell: /usr/local/openvpn_as/scripts/sacli -u admin -k access_to.0 --value "+ROUTE:192.168.33.0/24" UserPropPut
+
+    - name: restart openvpnas service
+      service: 
+        name: openvpnas
+        state: restarted
+        
+    - name: view all users in AS local auth
+      shell: /usr/local/openvpn_as/scripts/confdba -a >> /root/test_results.log
+
+    - name: view vpn status output
+      shell: /usr/local/openvpn_as/scripts/sacli vpnstatus >> /root/test_results.log
+
+    - name: fetch test_results.log
+      fetch:
+        src: /root/test_results.log
+        dest: /tmp/as_test_results.log
+        flat: yes
