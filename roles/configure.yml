@@ -19,6 +19,7 @@
     - name: install python-pexpect from package
       apt:
         name: python-pexpect
+        force: yes
         state: latest
 
     - name: run initialization script

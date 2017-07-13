@@ -1,3 +1,4 @@
 as-ec2/
 .DS_Store
 */.DS_Store
+*.retry
