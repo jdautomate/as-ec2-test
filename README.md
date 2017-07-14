@@ -2,11 +2,13 @@
 
 ## In order to use this, or any command line tools with AWS, you need to complete the aws cli setup.
 
-### Install aws cli for your OS - dependencies are python2.7Â and pip, for me anyways
+### Install aws cli for your OS - dependencies are python2.7 and pip, for me anyways
 boto will automatically be installed as well, boto is used to pass your credentials to aws, once aws cli is installed correctly you should be able to run:
 
 ### There are some default scripts that AWS uses to communicate with ansible, included in this repo are ec2.py and ec2.ini
-Store these files at /etc/ansible on your machine, then set environment variables:
+Store these files at /etc/ansible on your machine, 
+* install_ec2scripts.sh
+then set environment variables:
 
 ```
 export AWS_ACCESS_KEY_ID='your key'
