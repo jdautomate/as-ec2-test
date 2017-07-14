@@ -27,7 +27,7 @@ Now you are ready to interact with AWS, run the create script:
 * ./create.sh
 
 It will take a few minutes to complete, an instance is being created
-This one is faster, enter yes if asked if you want to allow the connection:
+*The next one is faster, enter 'yes' if asked "Do you want to allow the connection?" (it is a new server):
 
 * ./configure.sh
 
