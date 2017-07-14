@@ -2,6 +2,6 @@
 
 echo "\nTerminating instance..."
 
-ansible-playbook roles/terminate.yml
+ansible-playbook tasks/terminate.yml
 
 echo "Success!\n"

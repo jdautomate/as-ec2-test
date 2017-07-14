@@ -2,6 +2,6 @@
 - hosts: localhost
   connection: local
   tasks:
-    - include: roles/main.yml
+    - include: tasks/main.yml
       static: no
   tags: ec2_create
