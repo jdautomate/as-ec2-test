@@ -16,11 +16,18 @@
     - name: test connection
       ping:
 
-    - name: install python-pexpect from package
+    - name: install python-pexpect from package (necessary for ansible expect module)
       apt:
         name: python-pexpect
         force: yes
         state: latest
+    
+    - name: set password
+      expect:
+        command: passwd openvpn
+        echo: no
+        responses:
+          "(?i)password": "openvpn"
 
     - name: run initialization script
       expect:
@@ -43,6 +50,9 @@
 
     - name: choose local authentication
       shell: /usr/local/openvpn_as/scripts/sacli --key auth.module.type --value local ConfigPut
+    
+    - name: Access server warm restart 
+      shell: /usr/local/openvpn_as/scripts/sacli start
 
     - name: add user named testuser
       shell: /usr/local/openvpn_as/scripts/sacli -u testuser -k type -v user_connect UserPropPut
@@ -55,8 +65,23 @@
         name: openvpnas
         state: restarted
 
-    - name: test authentication for testuser
+    - name: add password for testuser
+      shell: /usr/local/openvpn_as/scripts/sacli --user testuser --new_pass thisisapassword SetLocalPassword
+
+    - name: add password for admin
+      shell: /usr/local/openvpn_as/scripts/sacli --user admin --new_pass adminpassword SetLocalPassword
+    
+    - name: Access server warm restart 
+      shell: /usr/local/openvpn_as/scripts/sacli start
+
+    - name: test authentication for users added
       shell: /usr/local/openvpn_as/scripts/confdba -us >> /root/test_results.log
+
+    - name: change tunnel cipher (client)
+      shell: /usr/local/openvpn_as/scripts/sacli -k vpn.client.config_text -v AES-256-CBC ConfigPut
+
+    - name: change tunnel cipher (server)
+      shell: /usr/local/openvpn_as/scripts/sacli -k vpn.server.config_text -v AES-256-CBC ConfigPut
 
     - name: add user-specific access controls - testuser nat to 10.0.0.0/24
       shell: /usr/local/openvpn_as/scripts/sacli -u testuser -k access_to.0 --value "+NAT:10.0.0.0/24" UserPropPut
