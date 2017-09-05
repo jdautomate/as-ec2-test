@@ -16,6 +16,3 @@
     - name: upgrade to AS 2.1.12
       apt:
         deb: http://swupdate.openvpn.org/as/openvpn-as-2.1.12-Ubuntu16.amd_64.deb
-
-    - name: checksum for 2.1.12
-      raw: sha256sum /root/openvpn-as-2.1.12-Ubuntu16.amd_64.deb >> /root/test_results.log
