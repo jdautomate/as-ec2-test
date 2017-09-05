@@ -51,7 +51,11 @@ It will take a few minutes to complete, an instance is being created
 ```
 ./configure.sh
 ```
+Upgrade script added - upgrade this instance to AS 2.1.12
 
+```
+ansible-playbook tasks/update.yml
+```
 When that script has finished, terminate the instance at any time with:
 
 ```
