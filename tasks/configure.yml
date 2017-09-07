@@ -16,18 +16,14 @@
     - name: test connection
       ping:
 
-    - name: install python-pexpect from package (necessary for ansible expect module)
-      apt:
-        name: python-pexpect
-        force: yes
-        state: latest
+    - name: install python python-pexpect from package (necessary for ansible expect module)
+      apt: name={{ item }} state=installed update_cache=yes force=yes
+      with_items:
+        - python
+        - python-pexpect
     
-    - name: set password
-      expect:
-        command: passwd openvpn
-        echo: no
-        responses:
-          "(?i)password": "openvpn"
+    - name: get to root
+      shell: sudo su 
 
     - name: run initialization script
       expect:
@@ -38,6 +34,13 @@
           "(?i)indicate your agreement[^\r\n]*: ?$": "yes"
           "(?i)enter for default[^\r\n]*: ?$": ""
           "(?i)license key[^\r\n]*: ?$": ""
+
+    - name: set password
+      expect:
+        command: passwd openvpn
+        echo: no
+        responses:
+          "(?i)password": "openvpn"
 
     - name: find openvpn_as directory
       raw: ls /usr/local | grep openvpn_as >> /root/test_results.log
@@ -104,4 +107,16 @@
       fetch:
         src: /root/test_results.log
         dest: /tmp/as_test_results.log
+        flat: yes
+
+    - name: cd /home/openvpnas 
+      shell: cd /home/openvpnas 
+
+    - name: generate client profile for testuser
+      shell: /usr/local/openvpn_as/scripts/sacli --user testuser GetUserLogin > testuser.ovpn
+
+    - name: fetch testuser.ovpn 
+      fetch:
+        src: /home/openvpnas/testuser.ovpn 
+        dest: /tmp/testuser.ovpn
         flat: yes
