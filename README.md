@@ -1,5 +1,7 @@
 # as-ec2-test README
 
+# OpenVPN Access Server on EC2 - automated with ansible
+
 ## In order to use this, or any command line tools with AWS, you need to complete the aws cli setup.
 
 ### Install aws cli for your OS - dependencies are python2.7�and pip, for me anyways
